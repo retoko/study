@@ -10,4 +10,5 @@
     <color name="avengers_bg_black">#191926</color>
     <color name="avengers_gray">#6D6D80</color>
     <color name="avengers_red">#FF3466</color>
+    <color name="star_red">#FF3465</color>
 </resources>
