@@ -1,19 +1,40 @@
 package ru.android.study
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),
+  FragmentMoviesList.ClickListener, FragmentMoviesDetails.ClickListener {
+  private val fragmentMoviesList = FragmentMoviesList().apply { setListener(this@MainActivity) }
+  private val fragmentMovieDetails = FragmentMoviesDetails().apply {
+    setListener(this@MainActivity)
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    val textView = findViewById<TextView>(R.id.open_movie_details_activity_button)
-    textView.setOnClickListener {
-      val intent = Intent(this, MovieDetailsActivity::class.java)
-      startActivity(intent)
+    if (savedInstanceState == null) {
+      supportFragmentManager.beginTransaction().apply {
+        add(R.id.fragments_container, fragmentMoviesList)
+        commit()
+      }
+    }
+  }
+
+  override fun openMovieDetails() {
+    supportFragmentManager.beginTransaction().apply {
+      add(R.id.fragments_container, fragmentMovieDetails)
+      addToBackStack(null)
+      commit()
+    }
+  }
+
+  override fun onBackButtonPressed() {
+    val lastFragment = supportFragmentManager.fragments.last()
+    supportFragmentManager.beginTransaction().apply {
+      remove(lastFragment)
+      commit()
     }
   }
 }
