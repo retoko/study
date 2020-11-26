@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 
 class FragmentMoviesList : Fragment() {
-  private var textOpenDetails: TextView? = null
+  private var avengers: ConstraintLayout? = null
   private var listener: ClickListener? = null
 
   override fun onCreateView(
@@ -21,7 +21,7 @@ class FragmentMoviesList : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    textOpenDetails = view.findViewById<TextView>(R.id.movie).apply {
+    avengers = view.findViewById<ConstraintLayout>(R.id.movie).apply {
       setOnClickListener { listener?.openMovieDetails() }
     }
   }

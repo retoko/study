@@ -34,5 +34,6 @@ class MainActivity : AppCompatActivity(),
       remove(lastFragment)
       commit()
     }
+    supportFragmentManager.popBackStack()
   }
 }
