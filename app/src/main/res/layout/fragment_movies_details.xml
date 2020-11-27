@@ -2,11 +2,9 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:fillViewport="true"
-    tools:context=".MovieDetailsActivity">
+    android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -103,8 +101,8 @@
         <ImageView
             android:id="@+id/first_star"
             android:src="@drawable/ic_star_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:layout_marginTop="4dp"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="@id/guideline_left"
@@ -114,8 +112,8 @@
         <ImageView
             android:id="@+id/second_star"
             android:src="@drawable/ic_star_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:layout_marginTop="4dp"
             android:layout_marginStart="3.25dp"
             app:layout_constraintStart_toEndOf="@id/first_star"
@@ -125,8 +123,8 @@
         <ImageView
             android:id="@+id/third_star"
             android:src="@drawable/ic_star_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:layout_marginTop="4dp"
             android:layout_marginStart="3.25dp"
             app:layout_constraintStart_toEndOf="@id/second_star"
@@ -136,8 +134,8 @@
         <ImageView
             android:id="@+id/four_star"
             android:src="@drawable/ic_star_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:layout_marginTop="4dp"
             android:layout_marginStart="3.25dp"
             app:layout_constraintStart_toEndOf="@id/third_star"
@@ -147,8 +145,8 @@
         <ImageView
             android:id="@+id/fifty_star"
             android:src="@drawable/ic_star_icon_gray"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:layout_marginTop="4dp"
             android:layout_marginStart="3.25dp"
             app:layout_constraintStart_toEndOf="@id/four_star"
