@@ -1,6 +1,5 @@
 package ru.android.study
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +8,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 
 class FragmentMoviesList : Fragment() {
-  private var avengers: ConstraintLayout? = null
-  private var listener: ClickListener? = null
-
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -21,24 +17,12 @@ class FragmentMoviesList : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    avengers = view.findViewById<ConstraintLayout>(R.id.movie).apply {
-      setOnClickListener { listener?.openMovieDetails() }
+    val avengers = view.findViewById<ConstraintLayout>(R.id.movie)
+    avengers.setOnClickListener {
+      fragmentManager?.beginTransaction()?.
+        add(R.id.fragments_container, FragmentMoviesDetails())?.
+        addToBackStack(null)?.
+        commit()
     }
-  }
-
-  override fun onAttach(context: Context) {
-    super.onAttach(context)
-    if (context is ClickListener) {
-      listener = context
-    }
-  }
-
-  override fun onDetach() {
-    super.onDetach()
-    listener = null
-  }
-
-  interface ClickListener {
-    fun openMovieDetails()
   }
 }
