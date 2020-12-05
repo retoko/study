@@ -108,66 +108,27 @@
                     android:layout_marginTop="214dp"
                     android:textSize="8sp" />
 
-                <ImageView
-                    android:id="@+id/first_star"
-                    android:src="@drawable/ic_star_icon"
+                <com.iarcuschin.simpleratingbar.SimpleRatingBar
+                    android:id="@+id/rating_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:srb_starSize="8dp"
+                    app:srb_numberOfStars="5"
+                    app:srb_rating="4"
+                    app:srb_starBackgroundColor='@color/avengers_gray'
+                    app:srb_fillColor="@color/avengers_red"
+                    app:srb_starCornerRadius="3"
+                    app:srb_starsSeparation="0dp"
+                    app:srb_drawBorderEnabled="false"
                     android:layout_marginTop="4dp"
-                    app:layout_constraintHorizontal_chainStyle="spread_inside"
                     app:layout_constraintStart_toStartOf="@id/guideline_movie_left"
-                    app:layout_constraintTop_toBottomOf="@id/genre"
-                    app:layout_constraintEnd_toStartOf="@+id/second_star" />
-
-                <ImageView
-                    android:id="@+id/second_star"
-                    android:src="@drawable/ic_star_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginStart="2dp"
-                    app:layout_constraintStart_toEndOf="@id/first_star"
-                    app:layout_constraintTop_toBottomOf="@id/genre"
-                    app:layout_constraintEnd_toStartOf="@+id/third_star" />
-
-                <ImageView
-                    android:id="@+id/third_star"
-                    android:src="@drawable/ic_star_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginStart="2dp"
-                    app:layout_constraintStart_toEndOf="@id/second_star"
-                    app:layout_constraintTop_toBottomOf="@id/genre"
-                    app:layout_constraintEnd_toStartOf="@+id/four_star" />
-
-                <ImageView
-                    android:id="@+id/four_star"
-                    android:src="@drawable/ic_star_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginStart="2dp"
-                    app:layout_constraintStart_toEndOf="@id/third_star"
-                    app:layout_constraintTop_toBottomOf="@id/genre"
-                    app:layout_constraintEnd_toStartOf="@+id/fifty_star" />
-
-                <ImageView
-                    android:id="@+id/fifty_star"
-                    android:src="@drawable/ic_star_icon_gray"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginStart="2dp"
-                    app:layout_constraintStart_toEndOf="@id/four_star"
-                    app:layout_constraintTop_toBottomOf="@id/genre"
-                    app:layout_constraintEnd_toStartOf="@+id/reviews_count" />
+                    app:layout_constraintTop_toBottomOf="@id/genre" />
 
                 <TextView
                     android:id="@+id/reviews_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@id/fifty_star"
+                    app:layout_constraintStart_toEndOf="@id/rating_bar"
                     android:text="@string/reviews_count"
                     android:textStyle="bold"
                     android:layout_marginStart="6dp"
