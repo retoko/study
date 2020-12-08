@@ -13,7 +13,7 @@ class ActorsService {
     )
   }
 
-  fun getActorsForMovie(movieId: Int?): List<Actor> {
+  fun getActorsForMovie(movieId: Int): List<Actor> {
     return getActors().filter { it.movieId == movieId }
   }
 }

@@ -1,6 +1,5 @@
 package ru.android.study
 
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +40,3 @@ class ActorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     name.text = actor.name
   }
 }
-
-private val RecyclerView.ViewHolder.context
-  get() = this.itemView.context

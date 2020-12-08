@@ -69,7 +69,7 @@ class MoviesService {
     )
   }
 
-  fun getMovie(id: Int?): Movie {
-    return getMovies().first { it.id == id }
+  fun getMovie(id: Int): Movie? {
+    return getMovies().find { it.id == id }
   }
 }

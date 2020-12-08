@@ -1,6 +1,5 @@
 package ru.android.study
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,49 +12,32 @@ import androidx.recyclerview.widget.RecyclerView
 import com.iarcuschin.simpleratingbar.SimpleRatingBar
 import ru.android.study.data.MoviesService
 import ru.android.study.data.ActorsService
+import ru.android.study.data.model.Movie
 
 class FragmentMoviesDetails : Fragment() {
-  private var movieId: Int? = null;
-  private var recycler: RecyclerView? = null
+  private var adapter: ActorsListAdapter = ActorsListAdapter()
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    movieId = arguments?.getInt(MOVIE_ID);
-    return inflater.inflate(R.layout.fragment_movies_details, container, false)
-  }
+  ): View? = inflater.inflate(R.layout.fragment_movies_details, container, false)
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    recycler = view.findViewById(R.id.actors_list)
-    recycler?.adapter = ActorsListAdapter()
     val backButton = view.findViewById<Button>(R.id.back_button)
     backButton.setOnClickListener {
       fragmentManager?.popBackStack()
     }
-    setMovieData(view)
+    val recycler = view.findViewById<RecyclerView>(R.id.actors_list)
+    recycler.adapter = adapter
+    val movieId = arguments?.getInt(MOVIE_ID)
+    val movie = MoviesService().getMovie(movieId ?: return)
+    adapter.bindActors(ActorsService().getActorsForMovie(movieId))
+    setMovieData(view, movie ?: return)
   }
 
-  override fun onStart() {
-    super.onStart()
-    updateData()
-  }
-
-  override fun onDetach() {
-    recycler = null
-    super.onDetach()
-  }
-
-  private fun updateData() {
-    (recycler?.adapter as? ActorsListAdapter)?.apply {
-      bindActors(ActorsService().getActorsForMovie(movieId))
-    }
-  }
-
-  private fun setMovieData(view: View) {
-    val movie = MoviesService().getMovie(movieId)
+  private fun setMovieData(view: View, movie: Movie) {
     val background: ImageView = view.findViewById(R.id.background)
     val ageLimit: TextView = view.findViewById(R.id.age_limit)
     val genre: TextView = view.findViewById(R.id.genre)
@@ -74,6 +56,14 @@ class FragmentMoviesDetails : Fragment() {
   }
 
   companion object {
-    const val MOVIE_ID = "movie_id"
+    private const val MOVIE_ID = "movie_id"
+
+    fun newInstance(movieId: Int): FragmentMoviesDetails {
+      val movieDetailsFragment = FragmentMoviesDetails()
+      val bundle = Bundle()
+      bundle.putInt(MOVIE_ID, movieId)
+      movieDetailsFragment.arguments = bundle
+      return movieDetailsFragment
+    }
   }
 }
