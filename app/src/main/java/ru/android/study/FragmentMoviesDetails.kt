@@ -15,7 +15,7 @@ import ru.android.study.data.ActorsService
 import ru.android.study.data.model.Movie
 
 class FragmentMoviesDetails : Fragment() {
-  private var adapter: ActorsListAdapter = ActorsListAdapter()
+  private lateinit var adapter: ActorsListAdapter
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -29,6 +29,7 @@ class FragmentMoviesDetails : Fragment() {
     backButton.setOnClickListener {
       fragmentManager?.popBackStack()
     }
+    adapter = ActorsListAdapter()
     val recycler = view.findViewById<RecyclerView>(R.id.actors_list)
     recycler.adapter = adapter
     val movieId = arguments?.getInt(MOVIE_ID)
