@@ -2,15 +2,14 @@ package ru.android.study.data.model
 
 data class Movie(
   val id: Int,
-  val name: String,
-  val liked: Boolean,
-  val genre: String,
-  var rating: Float,
-  val reviewsCount: Int,
-  val ageLimit: Int,
-  val storyline: String,
-  val actorIds: List<Int>,
-  val filmDuration: Int,
-  val miniature: Int,
-  val background: Int
+  val title: String,
+  val overview: String,
+  val poster: String,
+  val backdrop: String,
+  val ratings: Float,
+  val numberOfRatings: Int,
+  val minimumAge: Int,
+  val runtime: Int,
+  val genres: List<Genre>,
+  val actors: List<Actor>
 )

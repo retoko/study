@@ -1,4 +1,4 @@
-package ru.android.study
+package ru.android.study.ui.movies_details.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import ru.android.study.R
 import ru.android.study.data.model.Actor
 
 class ActorsListAdapter() : RecyclerView.Adapter<ActorViewHolder>() {

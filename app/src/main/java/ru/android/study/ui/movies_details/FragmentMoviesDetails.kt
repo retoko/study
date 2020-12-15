@@ -1,4 +1,4 @@
-package ru.android.study
+package ru.android.study.ui.movies_details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +10,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.iarcuschin.simpleratingbar.SimpleRatingBar
+import ru.android.study.ui.movies_details.adapters.ActorsListAdapter
+import ru.android.study.R
 import ru.android.study.data.MoviesService
 import ru.android.study.data.ActorsService
 import ru.android.study.data.model.Movie
@@ -60,7 +62,8 @@ class FragmentMoviesDetails : Fragment() {
     private const val MOVIE_ID = "movie_id"
 
     fun newInstance(movieId: Int): FragmentMoviesDetails {
-      val movieDetailsFragment = FragmentMoviesDetails()
+      val movieDetailsFragment =
+        FragmentMoviesDetails()
       val bundle = Bundle()
       bundle.putInt(MOVIE_ID, movieId)
       movieDetailsFragment.arguments = bundle
