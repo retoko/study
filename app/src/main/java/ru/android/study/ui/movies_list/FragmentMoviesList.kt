@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.*
 import ru.android.study.ui.movies_list.adapters.MoviesListAdapter
 import ru.android.study.ui.movies_list.adapters.OnMovieClicked
 import ru.android.study.R
@@ -17,6 +18,7 @@ import ru.android.study.ui.movies_details.FragmentMoviesDetails
 
 class FragmentMoviesList : Fragment() {
   private lateinit var adapter: MoviesListAdapter
+  private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -32,7 +34,15 @@ class FragmentMoviesList : Fragment() {
     recycler.adapter = adapter
     val spanCount = calculateSpanCount()
     recycler.layoutManager = GridLayoutManager(requireContext(), spanCount)
-    adapter.bindActors(MoviesService().getMovies())
+
+    coroutineScope.launch {
+      adapter.bindMovies(MoviesService().getMovies(requireContext()))
+    }
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    coroutineScope.cancel()
   }
 
   private fun calculateSpanCount(): Int {

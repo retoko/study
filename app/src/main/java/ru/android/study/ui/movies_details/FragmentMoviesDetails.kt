@@ -1,5 +1,6 @@
 package ru.android.study.ui.movies_details
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,15 +10,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.iarcuschin.simpleratingbar.SimpleRatingBar
+import kotlinx.coroutines.*
 import ru.android.study.ui.movies_details.adapters.ActorsListAdapter
 import ru.android.study.R
 import ru.android.study.data.MoviesService
-import ru.android.study.data.ActorsService
-import ru.android.study.data.model.Movie
 
 class FragmentMoviesDetails : Fragment() {
   private lateinit var adapter: ActorsListAdapter
+  private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -35,12 +37,24 @@ class FragmentMoviesDetails : Fragment() {
     val recycler = view.findViewById<RecyclerView>(R.id.actors_list)
     recycler.adapter = adapter
     val movieId = arguments?.getInt(MOVIE_ID)
-    val movie = MoviesService().getMovie(movieId ?: return)
-    adapter.bindActors(ActorsService().getActorsForMovie(movieId))
-    setMovieData(view, movie ?: return)
+    coroutineScope.launch {
+      setMovieData(requireContext(), view, adapter, movieId)
+    }
   }
 
-  private fun setMovieData(view: View, movie: Movie) {
+  override fun onDestroy() {
+    super.onDestroy()
+    coroutineScope.cancel()
+  }
+
+  private suspend fun setMovieData(
+    context: Context, view: View, adapter: ActorsListAdapter, movieId: Int?
+  ) {
+    movieId ?: return
+    val movie = MoviesService().getMovie(context, movieId)
+    movie ?: return
+    adapter.bindActors(movie.actors)
+
     val background: ImageView = view.findViewById(R.id.background)
     val ageLimit: TextView = view.findViewById(R.id.age_limit)
     val genre: TextView = view.findViewById(R.id.genre)
@@ -49,13 +63,16 @@ class FragmentMoviesDetails : Fragment() {
     val title: TextView = view.findViewById(R.id.title)
     val storyline: TextView = view.findViewById(R.id.storyline_content)
 
-    background.setImageResource(movie.background)
-    ageLimit.text = getString(R.string.age_limit, movie.ageLimit)
-    genre.text = movie.genre
-    ratingBar.rating = movie.rating
-    reviewsCount.text = getString(R.string.reviews_count, movie.reviewsCount)
-    title.text = movie.name
-    storyline.text = movie.storyline
+    Glide.with(requireContext())
+      .load(movie.backdrop)
+      .into(background)
+
+    ageLimit.text = getString(R.string.age_limit, movie.minimumAge)
+    genre.text = movie.genres.joinToString(separator = ", ", transform = { it.name })
+    ratingBar.rating = movie.ratings.div(2)
+    reviewsCount.text = getString(R.string.reviews_count, movie.numberOfRatings)
+    title.text = movie.title
+    storyline.text = movie.overview
   }
 
   companion object {

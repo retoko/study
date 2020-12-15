@@ -55,14 +55,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="16dp" />
+            app:layout_constraintGuide_begin="@dimen/movies_details_margin_horizontal" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_right"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="16dp" />
+            app:layout_constraintGuide_end="@dimen/movies_details_margin_horizontal" />
 
         <TextView
             android:id="@+id/age_limit"
@@ -77,15 +77,14 @@
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="40sp"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
             app:layout_constraintTop_toTopOf="@+id/age_limit"
             android:layout_marginTop="12dp"
-            android:lines="2"
-            style="@style/WhiteBoldText"
-            android:text="@string/avengers_end_game"/>
+            style="@style/WhiteBoldText" />
 
         <TextView
             android:id="@+id/genre"
@@ -95,8 +94,7 @@
             app:layout_constraintTop_toBottomOf="@+id/title"
             android:layout_marginTop="4dp"
             android:textColor="@color/avengers_red"
-            android:textSize="14sp"
-            android:text="@string/avengers_genre" />
+            android:textSize="14sp" />
 
         <com.iarcuschin.simpleratingbar.SimpleRatingBar
             android:id="@+id/rating_bar"
