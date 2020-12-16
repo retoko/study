@@ -20,6 +20,7 @@ import ru.android.study.data.MoviesService
 class FragmentMoviesDetails : Fragment() {
   private lateinit var adapter: ActorsListAdapter
   private val coroutineScope = CoroutineScope(Dispatchers.Main)
+  private val moviesService = MoviesService()
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -51,8 +52,7 @@ class FragmentMoviesDetails : Fragment() {
     context: Context, view: View, adapter: ActorsListAdapter, movieId: Int?
   ) {
     movieId ?: return
-    val movie = MoviesService().getMovie(context, movieId)
-    movie ?: return
+    val movie = moviesService.getMovie(context, movieId) ?: return
     adapter.bindActors(movie.actors)
 
     val background: ImageView = view.findViewById(R.id.background)
@@ -79,8 +79,7 @@ class FragmentMoviesDetails : Fragment() {
     private const val MOVIE_ID = "movie_id"
 
     fun newInstance(movieId: Int): FragmentMoviesDetails {
-      val movieDetailsFragment =
-        FragmentMoviesDetails()
+      val movieDetailsFragment = FragmentMoviesDetails()
       val bundle = Bundle()
       bundle.putInt(MOVIE_ID, movieId)
       movieDetailsFragment.arguments = bundle
