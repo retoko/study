@@ -1,4 +1,4 @@
-package ru.android.study
+package ru.android.study.ui.movies_list.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,8 +6,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import ru.android.study.data.model.Movie
 import com.iarcuschin.simpleratingbar.SimpleRatingBar
+import ru.android.study.R
 
 class MoviesListAdapter(
   private val clickListener: OnMovieClicked
@@ -31,7 +35,7 @@ class MoviesListAdapter(
 
   override fun getItemCount(): Int = movies.size
 
-  fun bindActors(newMovies: List<Movie>) {
+  fun bindMovies(newMovies: List<Movie>) {
     movies = newMovies
     notifyDataSetChanged()
   }
@@ -48,19 +52,25 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
   private val filmDuration: TextView = itemView.findViewById(R.id.timeline)
 
   fun onBind(movie: Movie) {
-    photo.setImageResource(movie.miniature)
+    val roundingRadius = context.resources.getDimension(R.dimen.photo_border_radius).toInt()
+    val requestOptions = RequestOptions().transform(RoundedCorners(roundingRadius))
+    Glide.with(context)
+      .load(movie.poster)
+      .apply(requestOptions)
+      .into(photo)
+
     like.setImageResource(
-      when (movie.liked) {
+      when (false) { // temporary set always false
         true -> R.drawable.ic_like
         false -> R.drawable.ic_no_like
       }
     )
-    ageLimit.text = context.getString(R.string.age_limit, movie.ageLimit)
-    genre.text = movie.genre
-    ratingBar.rating = movie.rating
-    reviewsCount.text = context.getString(R.string.reviews_count, movie.reviewsCount)
-    title.text = movie.name
-    filmDuration.text = context.getString(R.string.film_duration, movie.filmDuration)
+    ageLimit.text = context.getString(R.string.age_limit, movie.minimumAge)
+    genre.text = movie.genres.joinToString(separator = ", ", transform = { it.name })
+    ratingBar.rating = movie.ratings.div(2)
+    reviewsCount.text = context.getString(R.string.reviews_count, movie.numberOfRatings)
+    title.text = movie.title
+    filmDuration.text = context.getString(R.string.film_duration, movie.runtime)
   }
 }
 
