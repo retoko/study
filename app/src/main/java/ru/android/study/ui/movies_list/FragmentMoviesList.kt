@@ -1,7 +1,6 @@
 package ru.android.study.ui.movies_list
 
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,7 @@ import ru.android.study.R
 import ru.android.study.data.model.Movie
 import ru.android.study.ui.movies_details.FragmentMoviesDetails
 import ru.android.study.ui.movies_list.view_models.MoviesListViewModel
+import ru.android.study.utils.calculateMoviesListSpanCount
 
 class FragmentMoviesList : Fragment() {
   private lateinit var adapter: MoviesListAdapter
@@ -41,20 +41,12 @@ class FragmentMoviesList : Fragment() {
   private fun setUpAdapter() {
     adapter = MoviesListAdapter(clickListener)
     recycler.adapter = adapter
-    val spanCount = calculateSpanCount()
+    val spanCount = calculateMoviesListSpanCount(requireContext())
     recycler.layoutManager = GridLayoutManager(requireContext(), spanCount)
   }
 
   private fun setMovies(movies: List<Movie>) {
     adapter.bindMovies(movies)
-  }
-
-  private fun calculateSpanCount(): Int {
-    val displayMetrics: DisplayMetrics = requireContext().resources.displayMetrics
-    val screenWidthDp = displayMetrics.widthPixels.div(displayMetrics.density)
-    val movieItemWidth = requireContext().resources.getDimension(R.dimen.movie_item_width)
-    val movieItemWidthDp = movieItemWidth.div(displayMetrics.density)
-    return screenWidthDp.div(movieItemWidthDp).toInt()
   }
 
   private val clickListener = object : OnMovieClicked {
