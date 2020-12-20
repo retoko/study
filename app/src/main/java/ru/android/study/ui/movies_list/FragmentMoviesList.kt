@@ -8,18 +8,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.*
 import ru.android.study.ui.movies_list.adapters.MoviesListAdapter
 import ru.android.study.ui.movies_list.adapters.OnMovieClicked
 import ru.android.study.R
-import ru.android.study.data.MoviesService
 import ru.android.study.data.model.Movie
 import ru.android.study.ui.movies_details.FragmentMoviesDetails
+import ru.android.study.ui.movies_list.view_models.MoviesListViewModel
 
 class FragmentMoviesList : Fragment() {
   private lateinit var adapter: MoviesListAdapter
-  private val coroutineScope = CoroutineScope(Dispatchers.Main)
-  private val moviesService = MoviesService()
+  private lateinit var recycler: RecyclerView
+  private val viewModel = MoviesListViewModel()
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -29,20 +28,25 @@ class FragmentMoviesList : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    initViews(view)
+    setUpAdapter()
+    viewModel.mutableMoviesList.observe(this.viewLifecycleOwner, this::setMovies)
+    viewModel.loadMovies(requireContext())
+  }
+
+  private fun initViews(view: View) {
+    recycler = view.findViewById(R.id.movies_list)
+  }
+
+  private fun setUpAdapter() {
     adapter = MoviesListAdapter(clickListener)
-    val recycler = view.findViewById<RecyclerView>(R.id.movies_list)
     recycler.adapter = adapter
     val spanCount = calculateSpanCount()
     recycler.layoutManager = GridLayoutManager(requireContext(), spanCount)
-
-    coroutineScope.launch {
-      adapter.bindMovies(moviesService.getMovies(requireContext()))
-    }
   }
 
-  override fun onDestroy() {
-    super.onDestroy()
-    coroutineScope.cancel()
+  private fun setMovies(movies: List<Movie>) {
+    adapter.bindMovies(movies)
   }
 
   private fun calculateSpanCount(): Int {
@@ -55,9 +59,9 @@ class FragmentMoviesList : Fragment() {
 
   private val clickListener = object : OnMovieClicked {
     override fun onClick(movie: Movie) {
-      fragmentManager?.beginTransaction()?.
-        add(R.id.fragments_container, FragmentMoviesDetails.newInstance(movie.id))?.
-        addToBackStack(null)?.
+      requireActivity().supportFragmentManager.beginTransaction().
+        add(R.id.fragments_container, FragmentMoviesDetails.newInstance(movie.id)).
+        addToBackStack(null).
         commit()
     }
   }
