@@ -8,16 +8,22 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.iarcuschin.simpleratingbar.SimpleRatingBar
 import ru.android.study.ui.movies_details.adapters.ActorsListAdapter
 import ru.android.study.R
+import ru.android.study.data.MoviesService
+import ru.android.study.data.model.Actor
 import ru.android.study.data.model.Movie
 import ru.android.study.ui.movies_details.view_models.MoviesDetailsViewModel
+import ru.android.study.ui.movies_details.view_models.MoviesDetailsViewModelFactory
 
 class FragmentMoviesDetails : Fragment() {
-  private val viewModel = MoviesDetailsViewModel()
+  private val viewModel: MoviesDetailsViewModel by viewModels {
+    MoviesDetailsViewModelFactory(MoviesService())
+  }
   private lateinit var adapter: ActorsListAdapter
   private lateinit var background: ImageView
   private lateinit var ageLimit: TextView
@@ -44,6 +50,7 @@ class FragmentMoviesDetails : Fragment() {
     setUpAdapter()
     val movieId = arguments?.getInt(MOVIE_ID)
     viewModel.mutableMovie.observe(this.viewLifecycleOwner, this::setMovie)
+    viewModel.mutableActors.observe(this.viewLifecycleOwner, this::setActors)
     viewModel.loadMovie(requireContext(), movieId ?: return)
   }
 
@@ -63,8 +70,11 @@ class FragmentMoviesDetails : Fragment() {
     recycler.adapter = adapter
   }
 
+  private fun setActors(actors: List<Actor>) {
+    adapter.bindActors(actors)
+  }
+
   private fun setMovie(movie: Movie) {
-    adapter.bindActors(movie.actors)
     Glide.with(requireContext()).load(movie.backdrop).into(background)
     ageLimit.text = getString(R.string.age_limit, movie.minimumAge)
     genre.text = movie.genres.joinToString(separator = ", ", transform = { it.name })

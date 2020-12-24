@@ -6,19 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.android.study.ui.movies_list.adapters.MoviesListAdapter
 import ru.android.study.ui.movies_list.adapters.OnMovieClicked
 import ru.android.study.R
+import ru.android.study.data.MoviesService
 import ru.android.study.data.model.Movie
 import ru.android.study.ui.movies_details.FragmentMoviesDetails
 import ru.android.study.ui.movies_list.view_models.MoviesListViewModel
+import ru.android.study.ui.movies_list.view_models.MoviesListViewModelFactory
 
 class FragmentMoviesList : Fragment() {
   private lateinit var adapter: MoviesListAdapter
   private lateinit var recycler: RecyclerView
-  private val viewModel = MoviesListViewModel()
+  private val viewModel: MoviesListViewModel by viewModels {
+    MoviesListViewModelFactory(MoviesService())
+  }
 
   override fun onCreateView(
     inflater: LayoutInflater,

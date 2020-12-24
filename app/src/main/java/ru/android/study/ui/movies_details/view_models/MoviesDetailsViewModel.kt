@@ -8,17 +8,21 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import ru.android.study.data.MoviesService
+import ru.android.study.data.model.Actor
 import ru.android.study.data.model.Movie
 
-class MoviesDetailsViewModel: ViewModel() {
-  private val moviesService = MoviesService()
+class MoviesDetailsViewModel(private val moviesService: MoviesService): ViewModel() {
   private val _mutableMovie = MutableLiveData<Movie>()
+  private val _mutableActors = MutableLiveData<List<Actor>>()
   val mutableMovie: LiveData<Movie> get() = _mutableMovie
+  val mutableActors: LiveData<List<Actor>> get() = _mutableActors
 
   fun loadMovie(context: Context, id: Int) {
+    mutableMovie.value?.let { return }
     viewModelScope.launch {
-      val movie = async { moviesService.getMovie(context, id) }
-      _mutableMovie.setValue(movie.await())
+      val deferredMovie = async { moviesService.getMovie(context, id) }
+      _mutableMovie.value = deferredMovie.await()
+      _mutableActors.value = mutableMovie.value?.actors
     }
   }
 }
