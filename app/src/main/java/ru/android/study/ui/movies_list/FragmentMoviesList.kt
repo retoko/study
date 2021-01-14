@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.android.study.ui.movies_list.adapters.MoviesListAdapter
 import ru.android.study.ui.movies_list.adapters.OnMovieClicked
 import ru.android.study.R
-import ru.android.study.data.MoviesService
 import ru.android.study.data.model.Movie
+import ru.android.study.data.network.MoviesDataSource
 import ru.android.study.ui.movies_details.FragmentMoviesDetails
 import ru.android.study.ui.movies_list.view_models.MoviesListViewModel
 import ru.android.study.ui.movies_list.view_models.MoviesListViewModelFactory
@@ -22,7 +22,7 @@ class FragmentMoviesList : Fragment() {
   private lateinit var adapter: MoviesListAdapter
   private lateinit var recycler: RecyclerView
   private val viewModel: MoviesListViewModel by viewModels {
-    MoviesListViewModelFactory(MoviesService())
+    MoviesListViewModelFactory(MoviesDataSource())
   }
 
   override fun onCreateView(
@@ -36,7 +36,7 @@ class FragmentMoviesList : Fragment() {
     initViews(view)
     setUpAdapter()
     viewModel.mutableMoviesList.observe(this.viewLifecycleOwner, this::setMovies)
-    viewModel.loadMovies(requireContext())
+    viewModel.loadMovies()
   }
 
   private fun initViews(view: View) {

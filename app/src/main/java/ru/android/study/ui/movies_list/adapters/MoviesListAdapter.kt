@@ -49,7 +49,6 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
   private val ratingBar: SimpleRatingBar = itemView.findViewById(R.id.rating_bar)
   private val reviewsCount: TextView = itemView.findViewById(R.id.reviews_count)
   private val title: TextView = itemView.findViewById(R.id.title)
-  private val filmDuration: TextView = itemView.findViewById(R.id.timeline)
 
   fun onBind(movie: Movie) {
     val roundingRadius = context.resources.getDimension(R.dimen.photo_border_radius).toInt()
@@ -70,7 +69,6 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     ratingBar.rating = movie.ratings.div(2)
     reviewsCount.text = context.getString(R.string.reviews_count, movie.numberOfRatings)
     title.text = movie.title
-    filmDuration.text = context.getString(R.string.film_duration, movie.runtime)
   }
 }
 

@@ -3,12 +3,8 @@
     <string name="open_movie_details_activity_button">Open movie details activity</string>
     <string name="back_button_text">Back</string>
     <string name="age_limit">%1$d+</string>
-    <string name="avengers_end_game">Avengers:\nEnd Game</string>
-    <string name="avengers_end_game_oneline">Avengers: End Game</string>
-    <string name="avengers_genre">Action, Adventure, Fantasy</string>
     <string name="reviews_count">%1$d REVIEWS</string>
     <string name="storyline">Storyline</string>
-    <string name="storyline_content">After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos\' actions and restore balance to the universe.</string>
     <string name="cast">Cast</string>
     <string name="movies_list">Movies list</string>
     <string name="film_duration">%1$d MIN</string>

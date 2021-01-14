@@ -3,4 +3,4 @@ package ru.android.study.data.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Genre(val id: Int, val name: String)
+data class GenresNetworkResponse(val genres: List<Genre>)
