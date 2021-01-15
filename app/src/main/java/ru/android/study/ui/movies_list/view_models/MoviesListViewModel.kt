@@ -7,16 +7,16 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import ru.android.study.data.model.Movie
-import ru.android.study.data.network.MoviesDataSource
+import ru.android.study.data.repositories.MoviesRepository
 
-class MoviesListViewModel(private val moviesService: MoviesDataSource): ViewModel() {
+class MoviesListViewModel(private val moviesRepository: MoviesRepository): ViewModel() {
   private val _mutableMoviesList = MutableLiveData<List<Movie>>(emptyList())
   val mutableMoviesList: LiveData<List<Movie>> get() = _mutableMoviesList
 
   fun loadMovies() {
     if (mutableMoviesList.value?.isEmpty() != true) { return }
     viewModelScope.launch {
-      val movies = async { moviesService.getMovies() }
+      val movies = async { moviesRepository.getMovies() }
       _mutableMoviesList.setValue(movies.await())
     }
   }

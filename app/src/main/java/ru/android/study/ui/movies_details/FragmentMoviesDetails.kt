@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.iarcuschin.simpleratingbar.SimpleRatingBar
@@ -16,13 +17,19 @@ import ru.android.study.ui.movies_details.adapters.ActorsListAdapter
 import ru.android.study.R
 import ru.android.study.data.model.Actor
 import ru.android.study.data.model.Movie
-import ru.android.study.data.network.MoviesDataSource
+import ru.android.study.data.network.retrofit.MoviesApiClient
+import ru.android.study.data.repositories.ActorsRepository
+import ru.android.study.data.repositories.MoviesRepository
 import ru.android.study.ui.movies_details.view_models.MoviesDetailsViewModel
 import ru.android.study.ui.movies_details.view_models.MoviesDetailsViewModelFactory
 
 class FragmentMoviesDetails : Fragment() {
+  private val moviesApiClint = MoviesApiClient.moviesApiClient
   private val viewModel: MoviesDetailsViewModel by viewModels {
-    MoviesDetailsViewModelFactory(MoviesDataSource())
+    MoviesDetailsViewModelFactory(
+      MoviesRepository(moviesApiClint),
+      ActorsRepository(moviesApiClint)
+    )
   }
   private lateinit var adapter: ActorsListAdapter
   private lateinit var background: ImageView

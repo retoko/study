@@ -8,9 +8,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import ru.android.study.data.model.Actor
 import ru.android.study.data.model.Movie
-import ru.android.study.data.network.MoviesDataSource
+import ru.android.study.data.repositories.ActorsRepository
+import ru.android.study.data.repositories.MoviesRepository
 
-class MoviesDetailsViewModel(private val moviesService: MoviesDataSource): ViewModel() {
+class MoviesDetailsViewModel(
+  private val moviesService: MoviesRepository,
+  private val actorsRepository: ActorsRepository
+): ViewModel() {
   private val _mutableMovie = MutableLiveData<Movie>()
   private val _mutableActors = MutableLiveData<List<Actor>>()
   val mutableMovie: LiveData<Movie> get() = _mutableMovie
@@ -20,7 +24,7 @@ class MoviesDetailsViewModel(private val moviesService: MoviesDataSource): ViewM
     mutableMovie.value?.let { return }
     viewModelScope.launch {
       val deferredMovie = async { moviesService.getMovie(id) }
-      val deferredMovieActors = async { moviesService.getActors(id) }
+      val deferredMovieActors = async { actorsRepository.getActors(id) }
       _mutableMovie.value = deferredMovie.await()
       _mutableActors.value = deferredMovieActors.await()
     }
