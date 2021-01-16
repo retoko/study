@@ -3,11 +3,12 @@ package ru.android.study.data.repositories
 import ru.android.study.data.model.Movie
 import ru.android.study.data.network.retrofit.MoviesApiClient
 import ru.android.study.data.network.retrofit.MoviesApiService
-import ru.android.study.data.utils.MoviesNetworkToDomainConverter
+import ru.android.study.data.MoviesNetworkToDomainConverter
 
-class MoviesRepository(private val moviesApiService: MoviesApiService) {
-  private val moviesToDomainConverter = MoviesNetworkToDomainConverter()
-
+class MoviesRepository(
+  private val moviesApiService: MoviesApiService,
+  private val moviesToDomainConverter: MoviesNetworkToDomainConverter
+) {
   suspend fun getMovies(): List<Movie> {
     val imageBaseUrl = moviesApiService.getConfig().images.base_url
     val movies = moviesApiService.getMovies().results

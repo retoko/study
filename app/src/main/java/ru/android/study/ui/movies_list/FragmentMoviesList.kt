@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.android.study.ui.movies_list.adapters.MoviesListAdapter
 import ru.android.study.ui.movies_list.adapters.OnMovieClicked
 import ru.android.study.R
+import ru.android.study.data.MoviesNetworkToDomainConverter
 import ru.android.study.data.model.Movie
 import ru.android.study.data.network.retrofit.MoviesApiClient
 import ru.android.study.data.repositories.MoviesRepository
@@ -24,8 +25,9 @@ class FragmentMoviesList : Fragment() {
   private lateinit var adapter: MoviesListAdapter
   private lateinit var recycler: RecyclerView
   private val moviesApiClint = MoviesApiClient.moviesApiClient
+  private val moviesToDomainConverter = MoviesNetworkToDomainConverter()
   private val viewModel: MoviesListViewModel by viewModels {
-    MoviesListViewModelFactory(MoviesRepository(moviesApiClint))
+    MoviesListViewModelFactory(MoviesRepository(moviesApiClint, moviesToDomainConverter))
   }
 
   override fun onCreateView(

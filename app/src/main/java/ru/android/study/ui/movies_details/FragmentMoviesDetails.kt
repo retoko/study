@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.iarcuschin.simpleratingbar.SimpleRatingBar
 import ru.android.study.ui.movies_details.adapters.ActorsListAdapter
 import ru.android.study.R
+import ru.android.study.data.MoviesNetworkToDomainConverter
 import ru.android.study.data.model.Actor
 import ru.android.study.data.model.Movie
 import ru.android.study.data.network.retrofit.MoviesApiClient
@@ -25,9 +26,10 @@ import ru.android.study.ui.movies_details.view_models.MoviesDetailsViewModelFact
 
 class FragmentMoviesDetails : Fragment() {
   private val moviesApiClint = MoviesApiClient.moviesApiClient
+  private val moviesToDomainConverter = MoviesNetworkToDomainConverter()
   private val viewModel: MoviesDetailsViewModel by viewModels {
     MoviesDetailsViewModelFactory(
-      MoviesRepository(moviesApiClint),
+      MoviesRepository(moviesApiClint, moviesToDomainConverter),
       ActorsRepository(moviesApiClint)
     )
   }

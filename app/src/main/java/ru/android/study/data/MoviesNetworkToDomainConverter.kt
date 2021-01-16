@@ -1,4 +1,4 @@
-package ru.android.study.data.utils
+package ru.android.study.data
 
 import ru.android.study.data.model.Genre
 import ru.android.study.data.model.Movie
