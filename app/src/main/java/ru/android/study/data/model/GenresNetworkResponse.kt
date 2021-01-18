@@ -5,4 +5,4 @@ import kotlinx.serialization.Serializable
 
 @Keep
 @Serializable
-data class Genre(val id: Int, val name: String)
+data class GenresNetworkResponse(val genres: List<Genre>)

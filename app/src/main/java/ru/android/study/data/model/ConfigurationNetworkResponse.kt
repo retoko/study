@@ -5,4 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Keep
 @Serializable
-data class Genre(val id: Int, val name: String)
+data class ConfigurationNetworkResponse(val images: Images)
+
+@Keep
+@Serializable
+data class Images(val base_url: String)

@@ -35,7 +35,6 @@
             android:layout_height="@dimen/movie_photo_height"
             android:layout_margin="2dp"
             android:scaleType="center"
-            android:src="@drawable/avengers_mini"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -77,7 +76,6 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:gravity="bottom"
-            android:text="@string/avengers_genre"
             android:textColor="@color/avengers_red"
             android:textSize="8sp"
             app:layout_constraintStart_toStartOf="@id/guideline_movie_left"
@@ -121,23 +119,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingEnd="8dp"
-            android:text="@string/avengers_end_game_oneline"
+            android:paddingBottom="8dp"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/guideline_movie_left"
             app:layout_constraintEnd_toEndOf="@+id/guideline_movie_right"
-            app:layout_constraintTop_toBottomOf="@+id/reviews_count" />
-
-        <TextView
-            android:id="@+id/timeline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:text="@string/film_duration"
-            android:textColor="@color/avengers_gray"
-            android:textSize="8sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/guideline_movie_left"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+            app:layout_constraintTop_toBottomOf="@+id/reviews_count"
+            app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
