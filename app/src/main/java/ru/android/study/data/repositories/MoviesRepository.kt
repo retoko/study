@@ -27,8 +27,7 @@ class MoviesRepository(
     val moviesEntityList = movieGenresEntityList.map { it.movie }
     val genresEntityList = movieGenresEntityList.map { it.genres }
 
-    moviesDao.insertMovies(moviesEntityList)
-    moviesDao.insertGenres(genresEntityList.flatten())
+    moviesDao.insertMoviesAndGenres(moviesEntityList, genresEntityList.flatten())
 
     return movies.map { movie ->
       val movieGenreIds = movie.genre_ids ?: emptyList()
@@ -50,8 +49,7 @@ class MoviesRepository(
     val genres = genresResponse.filter { genreIds.contains(it.id) }
     val movieGenresEntity = moviesToDomainConverter.movieNetworkToEntity(movie, imageBaseUrl, genres)
 
-    moviesDao.insert(movieGenresEntity.movie)
-    moviesDao.insertGenres(movieGenresEntity.genres)
+    moviesDao.insertMovieGenres(movieGenresEntity)
 
     return moviesToDomainConverter.movieNetworkToDomain(movie, imageBaseUrl, genres)
   }
