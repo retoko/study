@@ -7,15 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.android.study.ui.movies_list.adapters.MoviesListAdapter
 import ru.android.study.ui.movies_list.adapters.OnMovieClicked
 import ru.android.study.R
-import ru.android.study.data.MoviesNetworkToDomainConverter
+import ru.android.study.data.MoviesDataConverter
+import ru.android.study.data.db.MoviesDataBase
 import ru.android.study.data.model.Movie
 import ru.android.study.data.network.retrofit.MoviesApiClient
+import ru.android.study.data.network.retrofit.MoviesApiService
 import ru.android.study.data.repositories.MoviesRepository
 import ru.android.study.ui.movies_details.FragmentMoviesDetails
 import ru.android.study.ui.movies_list.view_models.MoviesListViewModel
@@ -24,11 +27,12 @@ import ru.android.study.ui.movies_list.view_models.MoviesListViewModelFactory
 class FragmentMoviesList : Fragment() {
   private lateinit var adapter: MoviesListAdapter
   private lateinit var recycler: RecyclerView
-  private val moviesApiClint = MoviesApiClient.moviesApiClient
-  private val moviesToDomainConverter = MoviesNetworkToDomainConverter()
-  private val viewModel: MoviesListViewModel by viewModels {
-    MoviesListViewModelFactory(MoviesRepository(moviesApiClint, moviesToDomainConverter))
-  }
+  private lateinit var database: MoviesDataBase
+  private lateinit var moviesApiClint: MoviesApiService
+  private lateinit var moviesDataConverter: MoviesDataConverter
+  private lateinit var moviesRepository: MoviesRepository
+  private lateinit var viewModelFactory: MoviesListViewModelFactory
+  private lateinit var viewModel: MoviesListViewModel
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -38,6 +42,18 @@ class FragmentMoviesList : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    database = MoviesDataBase.create(requireContext())
+    moviesApiClint = MoviesApiClient.moviesApiClient
+    moviesDataConverter = MoviesDataConverter()
+    moviesRepository = MoviesRepository(
+      moviesApiClint,
+      moviesDataConverter,
+      database.moviesDao
+    )
+    viewModelFactory = MoviesListViewModelFactory(moviesRepository)
+    viewModel = ViewModelProvider(this, viewModelFactory)
+      .get(MoviesListViewModel::class.java)
+
     initViews(view)
     setUpAdapter()
     viewModel.mutableMoviesList.observe(this.viewLifecycleOwner, this::setMovies)
