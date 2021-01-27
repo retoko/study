@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.WorkManager
 import ru.android.study.ui.movies_list.adapters.MoviesListAdapter
 import ru.android.study.ui.movies_list.adapters.OnMovieClicked
 import ru.android.study.R
@@ -19,7 +19,9 @@ import ru.android.study.data.db.MoviesDataBase
 import ru.android.study.data.model.Movie
 import ru.android.study.data.network.retrofit.MoviesApiClient
 import ru.android.study.data.network.retrofit.MoviesApiService
+import ru.android.study.data.repositories.ActorsRepository
 import ru.android.study.data.repositories.MoviesRepository
+import ru.android.study.jobs.MoviesWorkRepository
 import ru.android.study.ui.movies_details.FragmentMoviesDetails
 import ru.android.study.ui.movies_list.view_models.MoviesListViewModel
 import ru.android.study.ui.movies_list.view_models.MoviesListViewModelFactory
@@ -31,8 +33,10 @@ class FragmentMoviesList : Fragment() {
   private lateinit var moviesApiClint: MoviesApiService
   private lateinit var moviesDataConverter: MoviesDataConverter
   private lateinit var moviesRepository: MoviesRepository
+  private lateinit var actorsRepository: ActorsRepository
   private lateinit var viewModelFactory: MoviesListViewModelFactory
   private lateinit var viewModel: MoviesListViewModel
+  private lateinit var moviesWorkRepository: MoviesWorkRepository
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -45,6 +49,7 @@ class FragmentMoviesList : Fragment() {
     database = MoviesDataBase.create(requireContext())
     moviesApiClint = MoviesApiClient.moviesApiClient
     moviesDataConverter = MoviesDataConverter()
+    actorsRepository = ActorsRepository(moviesApiClint, database.actorsDao)
     moviesRepository = MoviesRepository(
       moviesApiClint,
       moviesDataConverter,
@@ -53,11 +58,18 @@ class FragmentMoviesList : Fragment() {
     viewModelFactory = MoviesListViewModelFactory(moviesRepository)
     viewModel = ViewModelProvider(this, viewModelFactory)
       .get(MoviesListViewModel::class.java)
+    moviesWorkRepository = MoviesWorkRepository()
 
+    initBackgroundTask()
     initViews(view)
     setUpAdapter()
     viewModel.mutableMoviesList.observe(this.viewLifecycleOwner, this::setMovies)
     viewModel.loadMovies()
+  }
+
+  private fun initBackgroundTask() {
+    WorkManager.getInstance(requireContext())
+      .enqueue(moviesWorkRepository.constrainedPeriodicRequest)
   }
 
   private fun initViews(view: View) {
