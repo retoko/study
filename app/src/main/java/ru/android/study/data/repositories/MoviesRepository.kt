@@ -11,10 +11,12 @@ class MoviesRepository(
   private val moviesToDomainConverter: MoviesDataConverter,
   private val moviesDao: MoviesDao
 ) {
-  suspend fun getMovies(): List<Movie> {
-    val moviesFromDb = getMoviesFromDb()
+  suspend fun getMovies(refresh: Boolean = false): List<Movie> {
+    if (!refresh) {
+      val moviesFromDb = getMoviesFromDb()
 
-    if (moviesFromDb.isNotEmpty()) { return moviesFromDb }
+      if (moviesFromDb.isNotEmpty()) { return moviesFromDb }
+    }
 
     val imageBaseUrl = moviesApiService.getConfig().images.base_url
     val movies = moviesApiService.getMovies().results
