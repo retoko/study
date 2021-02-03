@@ -4,8 +4,10 @@ import ru.android.study.data.db.dao.ActorsDao
 import ru.android.study.data.db.entity.ActorEntity
 import ru.android.study.data.model.Actor
 import ru.android.study.data.network.retrofit.MoviesApiService
+import javax.inject.Inject
 
-class ActorsRepository(
+class ActorsRepository
+@Inject constructor(
   private val moviesApiService: MoviesApiService,
   private val actorsDao: ActorsDao
 ) {

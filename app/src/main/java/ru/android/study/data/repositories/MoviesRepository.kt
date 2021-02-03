@@ -1,12 +1,13 @@
 package ru.android.study.data.repositories
 
 import ru.android.study.data.model.Movie
-import ru.android.study.data.network.retrofit.MoviesApiClient
 import ru.android.study.data.network.retrofit.MoviesApiService
 import ru.android.study.data.MoviesDataConverter
 import ru.android.study.data.db.dao.MoviesDao
+import javax.inject.Inject
 
-class MoviesRepository(
+class MoviesRepository
+@Inject constructor(
   private val moviesApiService: MoviesApiService,
   private val moviesToDomainConverter: MoviesDataConverter,
   private val moviesDao: MoviesDao
@@ -44,7 +45,7 @@ class MoviesRepository(
 
     if (movieFromDb != null) { return movieFromDb }
 
-    val imageBaseUrl = MoviesApiClient.moviesApiClient.getConfig().images.base_url
+    val imageBaseUrl = moviesApiService.getConfig().images.base_url
     val movie = moviesApiService.getMovie(movieId)
     val genreIds = movie.genres?.map { it.id } ?: emptyList()
     val genresResponse = moviesApiService.getGenres().genres

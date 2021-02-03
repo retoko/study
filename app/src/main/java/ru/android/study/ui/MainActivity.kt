@@ -1,7 +1,8 @@
-package ru.android.study
+package ru.android.study.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import ru.android.study.R
 import ru.android.study.ui.movies_list.FragmentMoviesList
 
 class MainActivity : AppCompatActivity() {
@@ -11,7 +12,8 @@ class MainActivity : AppCompatActivity() {
 
     if (savedInstanceState == null) {
       supportFragmentManager.beginTransaction().
-        add(R.id.fragments_container,
+        add(
+          R.id.fragments_container,
           FragmentMoviesList()
         ).
         commit()
