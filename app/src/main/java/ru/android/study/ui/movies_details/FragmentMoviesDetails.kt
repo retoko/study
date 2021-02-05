@@ -43,7 +43,7 @@ class FragmentMoviesDetails : Fragment() {
 
   override fun onAttach(context: Context) {
     super.onAttach(context)
-    (context.applicationContext as MoviesApplication).androidInjector().inject(this)
+    MoviesApplication.hasAndroidInjector.androidInjector().inject(this)
   }
 
   override fun onCreateView(

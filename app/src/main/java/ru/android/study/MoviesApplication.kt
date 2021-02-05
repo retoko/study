@@ -22,6 +22,10 @@ class MoviesApplication: Application(), HasAndroidInjector {
 
   private lateinit var component: ApplicationComponent
 
+  companion object {
+    lateinit var hasAndroidInjector: HasAndroidInjector
+  }
+
   val appComponent: ApplicationComponent
     get() = component
 
@@ -29,6 +33,8 @@ class MoviesApplication: Application(), HasAndroidInjector {
 
   override fun onCreate() {
     super.onCreate()
+    hasAndroidInjector = this
+
     component = DaggerApplicationComponent.builder()
       .application(this)
       .appModule(AppModule(this))

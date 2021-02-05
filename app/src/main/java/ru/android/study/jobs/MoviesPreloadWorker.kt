@@ -20,7 +20,7 @@ class MoviesPreloadWorker(
   lateinit var actorsRepository: ActorsRepository
 
   override suspend fun doWork(): Result {
-    (applicationContext as MoviesApplication).androidInjector().inject(this)
+    MoviesApplication.hasAndroidInjector.androidInjector().inject(this)
 
     return try {
       val movies = moviesRepository.getMovies(true)
