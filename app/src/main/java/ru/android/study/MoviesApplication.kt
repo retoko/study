@@ -17,9 +17,10 @@ class MoviesApplication: Application(), HasAndroidInjector {
 
   @Inject
   lateinit var injector: DispatchingAndroidInjector<Any>
+  @Inject
+  lateinit var moviesWorkScheduler: MoviesWorkScheduler
 
   private lateinit var component: ApplicationComponent
-  private lateinit var workManager: WorkManager
 
   val appComponent: ApplicationComponent
     get() = component
@@ -35,7 +36,6 @@ class MoviesApplication: Application(), HasAndroidInjector {
 
     component.inject(this)
 
-    workManager = WorkManager.getInstance(applicationContext)
-    MoviesWorkScheduler(workManager).startBackgroundMoviesPreload()
+    moviesWorkScheduler.startBackgroundMoviesPreload()
   }
 }

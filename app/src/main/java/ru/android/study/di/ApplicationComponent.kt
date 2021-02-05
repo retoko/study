@@ -19,7 +19,8 @@ import dagger.android.AndroidInjectionModule
     ViewModelModule::class,
     MoviesDataConverterModule::class,
     MoviesFragmentModule::class,
-    WorkerModule::class
+    WorkerModule::class,
+    MoviesWorkSchedulerModule::class
   ]
 )
 interface ApplicationComponent {
