@@ -12,9 +12,11 @@ import ru.android.study.data.model.Actor
 import ru.android.study.data.model.Movie
 import ru.android.study.data.repositories.ActorsRepository
 import ru.android.study.data.repositories.MoviesRepository
+import javax.inject.Inject
 
-class MoviesDetailsViewModel(
-  private val moviesService: MoviesRepository,
+class MoviesDetailsViewModel
+@Inject constructor(
+  private val moviesRepository: MoviesRepository,
   private val actorsRepository: ActorsRepository
 ): ViewModel() {
   private val _mutableMovie = MutableLiveData<Movie>()
@@ -34,7 +36,7 @@ class MoviesDetailsViewModel(
   fun loadMovie(id: Int) {
     mutableMovie.value?.let { return }
     viewModelScope.launch(exceptionHandler) {
-      val deferredMovie = async { moviesService.getMovie(id) }
+      val deferredMovie = async { moviesRepository.getMovie(id) }
       val deferredMovieActors = async { actorsRepository.getActors(id) }
       _mutableMovie.value = deferredMovie.await()
       _mutableActors.value = deferredMovieActors.await()

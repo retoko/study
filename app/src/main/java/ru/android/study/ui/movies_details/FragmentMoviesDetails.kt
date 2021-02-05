@@ -1,5 +1,6 @@
 package ru.android.study.ui.movies_details
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,30 +15,15 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.iarcuschin.simpleratingbar.SimpleRatingBar
+import ru.android.study.MoviesApplication
 import ru.android.study.ui.movies_details.adapters.ActorsListAdapter
 import ru.android.study.R
-import ru.android.study.data.MoviesDataConverter
-import ru.android.study.data.db.MoviesDataBase
 import ru.android.study.data.model.Actor
 import ru.android.study.data.model.Movie
-import ru.android.study.data.network.retrofit.MoviesApiClient
-import ru.android.study.data.network.retrofit.MoviesApiService
-import ru.android.study.data.repositories.ActorsRepository
-import ru.android.study.data.repositories.MoviesRepository
 import ru.android.study.ui.movies_details.view_models.MoviesDetailsViewModel
-import ru.android.study.ui.movies_details.view_models.MoviesDetailsViewModelFactory
-import ru.android.study.ui.movies_list.adapters.MoviesListAdapter
-import ru.android.study.ui.movies_list.view_models.MoviesListViewModel
-import ru.android.study.ui.movies_list.view_models.MoviesListViewModelFactory
+import javax.inject.Inject
 
 class FragmentMoviesDetails : Fragment() {
-  private lateinit var database: MoviesDataBase
-  private lateinit var moviesApiClint: MoviesApiService
-  private lateinit var moviesDataConverter: MoviesDataConverter
-  private lateinit var moviesRepository: MoviesRepository
-  private lateinit var actorsRepository: ActorsRepository
-  private lateinit var viewModelFactory: MoviesDetailsViewModelFactory
-  private lateinit var viewModel: MoviesDetailsViewModel
   private lateinit var adapter: ActorsListAdapter
   private lateinit var background: ImageView
   private lateinit var ageLimit: TextView
@@ -48,6 +34,18 @@ class FragmentMoviesDetails : Fragment() {
   private lateinit var storyline: TextView
   private lateinit var recycler: RecyclerView
 
+  @Inject
+  lateinit var factory: ViewModelProvider.Factory
+
+  private val viewModel: MoviesDetailsViewModel by viewModels {
+    factory
+  }
+
+  override fun onAttach(context: Context) {
+    super.onAttach(context)
+    MoviesApplication.hasAndroidInjector.androidInjector().inject(this)
+  }
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -56,18 +54,6 @@ class FragmentMoviesDetails : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    database = MoviesDataBase.create(requireContext())
-    moviesApiClint = MoviesApiClient.moviesApiClient
-    moviesDataConverter = MoviesDataConverter()
-    actorsRepository = ActorsRepository(moviesApiClint, database.actorsDao)
-    moviesRepository = MoviesRepository(
-      moviesApiClint,
-      moviesDataConverter,
-      database.moviesDao
-    )
-    viewModelFactory = MoviesDetailsViewModelFactory(moviesRepository, actorsRepository)
-    viewModel = ViewModelProvider(this, viewModelFactory)
-      .get(MoviesDetailsViewModel::class.java)
 
     val backButton = view.findViewById<Button>(R.id.back_button)
     backButton.setOnClickListener {

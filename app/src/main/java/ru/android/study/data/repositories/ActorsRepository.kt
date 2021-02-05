@@ -4,16 +4,20 @@ import ru.android.study.data.db.dao.ActorsDao
 import ru.android.study.data.db.entity.ActorEntity
 import ru.android.study.data.model.Actor
 import ru.android.study.data.network.retrofit.MoviesApiService
+import javax.inject.Inject
 
-class ActorsRepository(
+class ActorsRepository
+@Inject constructor(
   private val moviesApiService: MoviesApiService,
   private val actorsDao: ActorsDao
 ) {
 
-  suspend fun getActors(movieId: Int): List<Actor> {
-    val actorsFromDb = getActorsFromDb(movieId)
+  suspend fun getActors(movieId: Int, refresh: Boolean = false): List<Actor> {
+    if (!refresh) {
+      val actorsFromDb = getActorsFromDb(movieId)
 
-    if (actorsFromDb.isNotEmpty()) { return actorsFromDb }
+      if (actorsFromDb.isNotEmpty()) { return actorsFromDb }
+    }
 
     val imageBaseUrl = moviesApiService.getConfig().images.base_url
     val actorsResponse = moviesApiService.getActors(movieId).cast

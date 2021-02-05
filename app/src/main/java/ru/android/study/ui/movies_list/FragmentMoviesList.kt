@@ -1,5 +1,6 @@
 package ru.android.study.ui.movies_list
 
+import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -11,28 +12,30 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ru.android.study.MoviesApplication
 import ru.android.study.ui.movies_list.adapters.MoviesListAdapter
 import ru.android.study.ui.movies_list.adapters.OnMovieClicked
 import ru.android.study.R
-import ru.android.study.data.MoviesDataConverter
-import ru.android.study.data.db.MoviesDataBase
 import ru.android.study.data.model.Movie
-import ru.android.study.data.network.retrofit.MoviesApiClient
-import ru.android.study.data.network.retrofit.MoviesApiService
-import ru.android.study.data.repositories.MoviesRepository
 import ru.android.study.ui.movies_details.FragmentMoviesDetails
 import ru.android.study.ui.movies_list.view_models.MoviesListViewModel
-import ru.android.study.ui.movies_list.view_models.MoviesListViewModelFactory
+import javax.inject.Inject
 
 class FragmentMoviesList : Fragment() {
   private lateinit var adapter: MoviesListAdapter
   private lateinit var recycler: RecyclerView
-  private lateinit var database: MoviesDataBase
-  private lateinit var moviesApiClint: MoviesApiService
-  private lateinit var moviesDataConverter: MoviesDataConverter
-  private lateinit var moviesRepository: MoviesRepository
-  private lateinit var viewModelFactory: MoviesListViewModelFactory
-  private lateinit var viewModel: MoviesListViewModel
+
+  @Inject
+  lateinit var factory: ViewModelProvider.Factory
+
+  private val viewModel: MoviesListViewModel by viewModels {
+    factory
+  }
+
+  override fun onAttach(context: Context) {
+    super.onAttach(context)
+    MoviesApplication.hasAndroidInjector.androidInjector().inject(this)
+  }
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -42,18 +45,6 @@ class FragmentMoviesList : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    database = MoviesDataBase.create(requireContext())
-    moviesApiClint = MoviesApiClient.moviesApiClient
-    moviesDataConverter = MoviesDataConverter()
-    moviesRepository = MoviesRepository(
-      moviesApiClint,
-      moviesDataConverter,
-      database.moviesDao
-    )
-    viewModelFactory = MoviesListViewModelFactory(moviesRepository)
-    viewModel = ViewModelProvider(this, viewModelFactory)
-      .get(MoviesListViewModel::class.java)
-
     initViews(view)
     setUpAdapter()
     viewModel.mutableMoviesList.observe(this.viewLifecycleOwner, this::setMovies)
